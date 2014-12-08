@@ -1,4 +1,4 @@
-var ref = require('reflektor');
+var ref = require('reflektorjs');
 
 ids = {
 	'64217f0200000000': 'Ben',

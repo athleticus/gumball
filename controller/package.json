@@ -9,6 +9,6 @@
   "author": "Ben Martin",
   "license": "ISC",
   "dependencies": {
-    "reflektor": "git://github.com/athleticus/reflektorjs"
+    "reflektorjs": "git://github.com/athleticus/reflektorjs"
   }
 }
