@@ -1,0 +1,15 @@
+{
+  "name": "gumball-reader",
+  "version": "0.0.1",
+  "description": "Transmit RFIDs over MQTT.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ben Martin",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^0.3.13",
+    "reflektorjs": "git://github.com/athleticus/reflektorjs"
+  }
+}
