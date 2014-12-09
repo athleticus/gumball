@@ -1,5 +1,5 @@
 module.exports = {
 	'port': 1883,
 	'host': 'winter.ceit.uq.edu.au',
-	'topic': 'ait'
+	'topic': 'mm-reader'
 };
