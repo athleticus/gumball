@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "mqtt": "^0.3.13",
-    "reflektorjs": "git://github.com/athleticus/reflektorjs",
     "underscore": "^1.7.0"
   }
 }
