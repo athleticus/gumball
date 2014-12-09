@@ -1,26 +1,43 @@
-var exec = require('exec');
 var mqtt = require('mqtt');
-
-var write_to_lcd = function(text) {
-	args = ['python', 'screen.py'].concat(text);
-
-	exec(args, function(){});
-}
+var LCD = require('./lcd');
+var template = require('./template.js')('./templates/', LCD);
 
 var config = require('./config.js');
 client = mqtt.createClient(config.port, config.host);
 
 client.subscribe(config.topic);
-client.on('message', function(topic, message) {
+client.on('message', function(topic, rawMessage) {
+    // ignore off-topic messages
 	if(topic != config.topic) {
 		return;
 	}
 
-	var text = message.split('\n').map(function(text){
-		return text.substr(0, config.maxLineWidth);
-	});
+    // parse the message as json
+    try {
+        var message = JSON.parse(rawMessage);
+    } catch(err) {
+        // do nothing if parsing fails
+        // todo: log
+        console.error('Invalid JSON: ' + rawMessage);
+        return;
+    }
 
-	write_to_lcd(text);	
+    var tpl = message.tpl;
+    if(!tpl) {
+        // handle undefined template
+        // todo: log
+        console.error('No template defined in message: ' + rawMessage);
+        return;
+    }
+
+    if(!template.exists(tpl)) {
+        // handle invalid template
+        // todo: log 
+        console.error('Invalid template: ' + tpl);
+        return;
+    }
+
+    template.run(tpl, {name: "Ben"});
 });
 
 
