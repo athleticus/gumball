@@ -28,7 +28,6 @@ module.exports = function(dir, context) {
 
     return {
         run: function(name, options) {
-            console.log(templates[name]);
             templates[name].call(context, options);
         },
         exists: function(name) {
