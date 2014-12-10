@@ -1,9 +1,11 @@
+var config = require('../config.js');
+
 var mqtt = require('mqtt'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    mongoose = require('mongoose');
 
 // connect to mongodb    
-var mongoose = require('mongoose');    
-mongoose.connect('mongodb://winter.ceit.uq.edu.au:27017/gumball');
+mongoose.connect(config.mongodb.url);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -12,24 +14,21 @@ db.on('error', console.error.bind(console, 'connection error:'));
 var ds = mongoose.Schema({
 	rfid: String,
 	name: String,
-	visits: {type: Number, default: 0}
+	visits: {
+		type: Number,
+		default: 0
+	}
 });
 
 var person = mongoose.model('person', ds);
 
-var config = require('./config.js');
 
-var client = mqtt.createClient(config.port, config.host);
 
-_.each(config.modules, function(topic, index) {
+var client = mqtt.connect(connect.mqtt.url);
+
+_.each(config.mqtt.topics, function(topic, index) {
 	client.subscribe(topic);
 });
-
-// temp create accounts
-//var matt = new person({rfid : '446779900000000', name: 'Matthew', visits : 0});
-//matt.save(function (err, matt) { if(err) return console.error(err)});
-//var ben = new person({rfid : '64217f0200000000', name: 'Ben', visits : 0});
-//ben.save(function (err, matt) { if(err) return console.error(err)});
 
 var act = function(id) {
 	var success = 0;

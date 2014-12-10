@@ -2,10 +2,11 @@ var mqtt = require('mqtt');
 var LCD = require('./lcd');
 var template = require('./template.js')('./templates/', LCD);
 
-var config = require('./config.js');
-client = mqtt.createClient(config.port, config.host);
+var config = require('../config.js');
+client = mqtt.connect(config.mqtt.url);
 
-client.subscribe(config.topic);
+client.subscribe(config.mqtt.topics.screen);
+
 client.on('message', function(topic, rawMessage) {
     // ignore off-topic messages
 	if(topic != config.topic) {
