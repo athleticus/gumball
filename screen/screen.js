@@ -37,7 +37,7 @@ client.on('message', function(topic, rawMessage) {
         return;
     }
 
-    template.run(tpl, {name: "Ben"});
+    template.run(tpl, message);
 });
 
 

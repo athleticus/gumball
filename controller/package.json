@@ -9,6 +9,7 @@
   "author": "Ben Martin",
   "license": "ISC",
   "dependencies": {
-    "reflektorjs": "git://github.com/athleticus/reflektorjs"
+    "mqtt": "^0.3.13",
+    "underscore": "^1.7.0"
   }
 }

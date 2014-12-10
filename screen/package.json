@@ -1,0 +1,17 @@
+{
+  "name": "screen",
+  "version": "0.0.1",
+  "description": "Screen display module for gumballs dispensed by RFID reader.",
+  "main": "screen.js",
+  "dependencies": {
+    "exec": "^0.1.2",
+    "mqtt": "^0.3.13",
+    "string": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ben Martin",
+  "license": "MIT"
+}
