@@ -9,6 +9,7 @@
   "author": "Ben Martin",
   "license": "ISC",
   "dependencies": {
+    "mongoose": "^3.8.20",
     "mqtt": "^0.3.13",
     "underscore": "^1.7.0"
   }
