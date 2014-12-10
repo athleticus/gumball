@@ -5,26 +5,17 @@ var mqtt = require('mqtt'),
     mongoose = require('mongoose');
 
 // connect to mongodb    
-mongoose.connect(config.mongodb.url);
+mongoose.connect(config.mongo.url);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 //create model
-var ds = mongoose.Schema({
-	rfid: String,
-	name: String,
-	visits: {
-		type: Number,
-		default: 0
-	}
-});
-
-var person = mongoose.model('person', ds);
+var person = mongoose.model('person', mongoose.Schema(require(config.mongo.models + '/person')));
 
 
 
-var client = mqtt.connect(connect.mqtt.url);
+var client = mqtt.connect(config.mqtt.url);
 
 _.each(config.mqtt.topics, function(topic, index) {
 	client.subscribe(topic);
