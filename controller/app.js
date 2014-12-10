@@ -4,6 +4,13 @@ var mqtt = require('mqtt'),
     _ = require('underscore'),
     mongoose = require('mongoose');
 
+// connect to mqtt
+var client = mqtt.connect(config.mqtt.url);
+
+_.each(config.mqtt.topics, function(topic, index) {
+	client.subscribe(topic);
+});
+
 // connect to mongodb    
 mongoose.connect(config.mongo.url);
 
@@ -13,20 +20,12 @@ db.on('error', console.error.bind(console, 'connection error:'));
 //create model
 var person = mongoose.model('person', mongoose.Schema(require(config.mongo.models + '/person')));
 
-
-
-var client = mqtt.connect(config.mqtt.url);
-
-_.each(config.mqtt.topics, function(topic, index) {
-	client.subscribe(topic);
-});
-
 var act = function(id) {
 	var success = 0;
 	var newVisits = 0;
 	var tpl, opts;
 
-	// todo: get entry from db
+	// get entry from db
 	person.findOne({rfid: id}, 'name visits', function(err, doc) {
 		if(err) {
 			return console.error(err);
@@ -40,9 +39,17 @@ var act = function(id) {
 					name: doc.name,
 					visits: newVisits
 				};
-				person.update({rfid: id}, {$inc : {visits: 1}}, 
+				person.update({
+						rfid: id
+					}, {
+						$inc : {
+							visits: 1
+						}
+					}, 
 					function (err) {
-						if(err) return console.error(err);
+						if(err) {
+							return console.error(err);
+						}
 					});			
 			} else {
 				opts = {
@@ -50,20 +57,24 @@ var act = function(id) {
 					id: id
 				};
 			}
+
+			// broadcast to screen
 			client.publish(config.mqtt.topics.screen, JSON.stringify(opts));
 			
-			client.publish(config.mqtt.topics.dispenser, 'yolo');			
+			// broadcast to dispenser
+			// todo: include dispensing time
+			client.publish(config.mqtt.topics.dispenser, 'yolo');
 		}
 	})
 };
 
 client.on('message', function(topic, id) {
 	// ignore non-reader topics
-	if(topic != config.modules.reader) {
+	if(topic != config.mqtt.topics.reader) {
 		return;
 	}
 
 	// run appropriate action
-	// todo: abstract
+	// todo: abstract?
 	act(id);		
 });
