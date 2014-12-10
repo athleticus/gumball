@@ -59,8 +59,9 @@ var act = function(id) {
 					id: id
 				};
 			}
-			client.publish(config.modules.screen, JSON.stringify(opts));
-			//client.publish(config.modules.dispenser, 'yolo');			
+			client.publish(config.mqtt.topics.screen, JSON.stringify(opts));
+			
+			client.publish(config.mqtt.topics.dispenser, 'yolo');			
 		}
 	})
 };
