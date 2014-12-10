@@ -31,7 +31,8 @@ var act = function(id) {
 		if(err) {
 			return console.error(err);
 		} else {
-			if(doc != null) {
+			success = doc != null;
+			if(success) {
 				console.log('%s %s %d', doc.name, id, doc.visits);
 				newVisits = doc.visits + 1;
 				opts = {
@@ -52,14 +53,16 @@ var act = function(id) {
 			}
 			client.publish(config.mqtt.topics.screen, JSON.stringify(opts));
 			
-			client.publish(config.mqtt.topics.dispenser, 'yolo');			
+			if(success) {
+				client.publish(config.mqtt.topics.dispenser, 'yolo');
+			}
 		}
 	})
 };
 
 client.on('message', function(topic, id) {
 	// ignore non-reader topics
-	if(topic != config.modules.reader) {
+	if(topic != config.mqtt.topics.reader) {
 		return;
 	}
 

@@ -9,7 +9,7 @@ client.subscribe(config.mqtt.topics.screen);
 
 client.on('message', function(topic, rawMessage) {
     // ignore off-topic messages
-	if(topic != config.topic) {
+	if(topic != config.mqtt.topics.screen) {
 		return;
 	}
 
