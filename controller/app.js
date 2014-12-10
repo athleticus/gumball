@@ -16,7 +16,6 @@ var ds = mongoose.Schema({
 });
 
 var person = mongoose.model('person', ds);
-/// etc.
 
 var config = require('./config.js');
 
@@ -29,12 +28,8 @@ _.each(config.modules, function(topic, index) {
 // temp create accounts
 //var matt = new person({rfid : '446779900000000', name: 'Matthew', visits : 0});
 //matt.save(function (err, matt) { if(err) return console.error(err)});
-
-/*var ids = {
-	'64217f0200000000': 'Ben',
-	'42d6c3a00000000': 'Lucas',
-	'446779900000000': 'Matt'
-};*/
+//var ben = new person({rfid : '64217f0200000000', name: 'Ben', visits : 0});
+//ben.save(function (err, matt) { if(err) return console.error(err)});
 
 var act = function(id) {
 	var success = 0;
@@ -42,28 +37,23 @@ var act = function(id) {
 	var tpl, opts;
 
 	// todo: get entry from db
-	person.findOne({rfid: id}, 'name visits', function(err, person) {
+	person.findOne({rfid: id}, 'name visits', function(err, doc) {
 		if(err) {
 			return console.error(err);
 		} else {
-			if(person != null) {
-				console.log('%s %s %d', person.name, id, person.visits);
-				newVisits = person.visits + 1;
+			if(doc != null) {
+				console.log('%s %s %d', doc.name, id, doc.visits);
+				newVisits = doc.visits + 1;
 				opts = {
 					tpl: 'success',
 					id: id,
-					name: person.name,
+					name: doc.name,
 					visits: newVisits
 				};
 				person.update({rfid: id}, {$inc : {visits: 1}}, 
 					function (err) {
 						if(err) return console.error(err);
-						
-						person.save(function(err) {
-							if(err) return console.error(err);
-						});
-					});
-				
+					});			
 			} else {
 				opts = {
 					tpl: 'fail',
@@ -71,11 +61,9 @@ var act = function(id) {
 				};
 			}
 			client.publish(config.modules.screen, JSON.stringify(opts));
-			//client.publish(config.modules.dispenser, 'yolo');
-			
+			//client.publish(config.modules.dispenser, 'yolo');			
 		}
 	})
-
 };
 
 client.on('message', function(topic, id) {
