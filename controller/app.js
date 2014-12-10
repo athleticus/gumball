@@ -30,7 +30,8 @@ var act = function(id) {
 		if(err) {
 			return console.error(err);
 		} else {
-			if(doc != null) {
+			success = doc != null;
+			if(success) {
 				console.log('%s %s %d', doc.name, id, doc.visits);
 				newVisits = doc.visits + 1;
 				opts = {
@@ -60,10 +61,11 @@ var act = function(id) {
 
 			// broadcast to screen
 			client.publish(config.mqtt.topics.screen, JSON.stringify(opts));
-			
+
 			// broadcast to dispenser
-			// todo: include dispensing time
-			client.publish(config.mqtt.topics.dispenser, 'yolo');
+			if(success) {
+				client.publish(config.mqtt.topics.dispenser, 'yolo');
+			}
 		}
 	})
 };
