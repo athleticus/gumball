@@ -9,7 +9,7 @@ var compress = require('compression');
 var methodOverride = require('method-override');
 
 module.exports = function(app, config) {
-  app.set('views', config.root + '/app/views');
+  app.set('views', config.webpanel.root + '/app/views');
   app.set('view engine', 'jade');
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
@@ -20,10 +20,10 @@ module.exports = function(app, config) {
   }));
   app.use(cookieParser());
   app.use(compress());
-  app.use(express.static(config.root + '/public'));
+  app.use(express.static(config.webpanel.root + '/public'));
   app.use(methodOverride());
 
-  var controllers = glob.sync(config.root + '/app/controllers/*.js');
+  var controllers = glob.sync(config.webpanel.root + '/app/controllers/*.js');
   controllers.forEach(function (controller) {
     require(controller)(app);
   });
