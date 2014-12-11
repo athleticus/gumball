@@ -10,8 +10,11 @@ module.exports = function (app) {
 };
 
 router.get('/statistics', function(req, res, next) {
-  res.render('stats', {
-    title: config.webpanel.app.name
+  Person.find(function(err, people) {
+    res.render('stats', {
+      title: config.webpanel.app.name,
+      people: people
+    });
   });
 });
 

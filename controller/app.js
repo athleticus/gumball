@@ -27,6 +27,7 @@ var act = function(id) {
 
 	// get entry from db
 	person.findOne({rfid: id}, 'name visits', function(err, doc) {
+		console.log(typeof doc, doc, doc.name, doc.visits);
 		if(err) {
 			return console.error(err);
 		} else {
