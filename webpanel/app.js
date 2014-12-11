@@ -11,7 +11,7 @@ db.on('error', function () {
 
 var models = glob.sync(config.webpanel.root + '/app/models/*.js');
 models.forEach(function (model) {
-  require(model);
+  require(model)(mongoose);
 });
 var app = express();
 

@@ -18,7 +18,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 //create model
-var person = mongoose.model('person', mongoose.Schema(require('./models/person')));
+var person = require('./models/person')(mongoose);
 
 var act = function(id) {
 	var success = 0;

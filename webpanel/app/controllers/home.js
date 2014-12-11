@@ -26,7 +26,10 @@ router.post('/register', function(req, res, next) {
   var name = req.body.name;
 
   if(!name) {
-    res.send("You must enter a name");
+    res.json({
+      type: 'error',
+      msg: "You must enter a name"
+    });
     return;
   }
   
@@ -34,7 +37,10 @@ router.post('/register', function(req, res, next) {
   Person.findOne({rfid: rfid}, function(err, person) {
     if(person) {
       // person exists
-      res.send('RFID "' + rfid + '" already exists.');
+      res.json({
+        type: 'error',
+        msg: 'RFID "' + rfid + '" already exists.'
+      });
       return;
     }
 
@@ -43,13 +49,16 @@ router.post('/register', function(req, res, next) {
       rfid: rfid,
       name: name
     }, function(err, person) {
-      res.send('Successfully created "' + name + '" with rfid: ' + rfid);
+      res.json({
+        type: 'success',
+        msg: 'Successfully created "' + name + '" with rfid: ' + rfid
+      });
     });
   });
 });
 
 router.get('/', function(req, res, next) {
-  Person.find();
+  res.redirect('/statistics');
 });
 
 // router.get('/', function (req, res, next) {

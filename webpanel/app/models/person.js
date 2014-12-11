@@ -1,13 +1,14 @@
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+module.exports = function(mongoose) {
+    var Schema = mongoose.Schema;
 
-var PersonSchema = new Schema({
-    rfid: String,
-    name: String,
-    visits: {
-        type: Number,
-        default: 0
-    }
-});
+    var PersonSchema = new Schema({
+        rfid: String,
+        name: String,
+        visits: {
+            type: Number,
+            default: 0
+        }
+    });
 
-mongoose.model('person', PersonSchema);
+    return mongoose.model('person', PersonSchema);
+}
