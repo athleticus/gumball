@@ -2,8 +2,6 @@ var path = require('path'),
     rootPath = path.normalize(__dirname + '/webpanel'),
     env = process.env.NODE_ENV || 'development';
 
-var mongoModels = path.normalize(__dirname + '/mongo/models');
-
 module.exports = {
     mqtt: {
         url: 'mqtt://winter.ceit.uq.edu.au:1883',
@@ -15,8 +13,7 @@ module.exports = {
         }
     },
     mongo: {
-        url: 'mongodb://winter.ceit.uq.edu.au:27017/gumball',
-        models: mongoModels
+        url: 'mongodb://winter.ceit.uq.edu.au:27017/gumball'
     },
     modules: {
         dispenser: {
@@ -31,7 +28,7 @@ module.exports = {
         root: rootPath,
         port: 3000,
         app: {
-            name: 'webpanel'
+            name: 'Gumby'
         }
     }
 };

@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .container
+        h1 Stats
+        p Welcome to #{title}
+
+    .container
+        table.table
+            thead
+                tr
+                    th RFID
+                    th Name
+                    th Visits
+
+            tbody
+                each person in people
+                    tr
+                        td= person.rfid
+                        td= person.name
+                        td= person.visits
+

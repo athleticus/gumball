@@ -2,8 +2,13 @@
 @import "../components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+footer {
+    padding-top: 2em;
+    margin-top: 2em;
+    border-top: #eee 1px solid;
 }
 
 a {
