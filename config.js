@@ -26,7 +26,7 @@ module.exports = {
     },
     webpanel: {
         root: rootPath,
-        port: 3000,
+        port: 13337,
         app: {
             name: 'Gumby'
         }
