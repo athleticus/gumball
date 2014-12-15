@@ -1,3 +1,5 @@
+process.chdir(__dirname);
+
 var mqtt = require('mqtt');
 var LCD = require('./lcd');
 var template = require('./template.js')('./templates/', LCD);
