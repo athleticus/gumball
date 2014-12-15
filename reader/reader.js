@@ -1,3 +1,5 @@
+process.chdir(__dirname);
+
 var ref = require('reflektorjs');
 var mqtt = require('mqtt');
 

@@ -1,3 +1,5 @@
+process.chdir(__dirname);
+
 var config = require('../config.js');
 
 var mqtt = require('mqtt'),
@@ -31,7 +33,7 @@ var act = function(id) {
 		function(err, count){
 			if(err) {
 				return console.error(err);
-			} else if (count < 2) {
+			} else if (count < 2 || id == '64217f0200000000') {
 				recordVisit(id);
 			} else {
 				opts = {
