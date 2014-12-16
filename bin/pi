@@ -1,0 +1,5 @@
+cd /home/pi/Desktop/gumball/
+
+/bin/forever start reader/reader.js
+/bin/forever start controller/app.js
+/bin/forever start screen/screen.js
