@@ -10,12 +10,20 @@ module.exports = {
             screen: 'mm-screen',
             //dispenser: 'mm-dispenser'
             dispenser: 'ait',
+            config: 'mm-config'
         }
     },
     mongo: {
         url: 'mongodb://winter.ceit.uq.edu.au:27017/gumball'
     },
     modules: {
+    	controller: {
+    		'accessPeriod' : 300000,
+        	'accessAmount' : 2,
+        	'recentVisitTimeframe' : 6048000000,
+        	'recentVisitLabel' : "week",
+        	'dispenseTime' : 1
+    	},
         dispenser: {
         },
         reader: {

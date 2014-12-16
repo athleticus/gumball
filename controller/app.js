@@ -25,13 +25,14 @@ var act = function(id) {
 	var success = 0;
 	var newVisits = 0;
 	var tpl, opts;
-	
-	var date = Date.now() - 30000;
+	//check for uses in last [accessPeriod] milliseconds
+	var date = Date.now() - config.modules.controller.accessPeriod;
 	records.count({rfid: id, timestamp: {$gt: date}}, 
 		function(err, count){
 			if(err) {
 				return console.error(err);
-			} else if (count < 2) {
+			// check if uses exceeds accessAmount within accessPeriod
+			} else if (count < config.modules.controller.accessAmount) {
 				recordVisit(id);
 			} else {
 				opts = {
@@ -48,8 +49,8 @@ var recordVisit = function(id) {
 		if (err) {
 			return console.error(err);
 		} else {
-			//Date 1 week ago
-			date = Date.now() - 180000 //6048000000
+			//Date range that number of visits will be displayed for
+			date = Date.now() - config.modules.controller.recentVisitTimeframe
 			records.count({rfid: id, timestamp: {$gt: date}}, 
 				function(err, count){
 					if(err) {
@@ -57,15 +58,15 @@ var recordVisit = function(id) {
 					} else {
 						//console.log(count);
 						var num = count;
-						swipe(id, num);
+						send(id, num);
 					}
 				});
 		}
 	});
 }
 	
-var swipe = function(id, num) {
-	person.findOne({rfid: id}, 'name visits', function ded(err, doc) {
+var send = function(id, num) {
+	person.findOne({rfid: id}, 'name visits', function (err, doc) {
 		if(err) {
 			return console.error(err);
 		} else {
@@ -77,7 +78,8 @@ var swipe = function(id, num) {
 					tpl: 'success',
 					id: id,
 					name: doc.name,
-					visits: num
+					visits: num,
+					timeframe: config.modules.controller.recentVisitLabel
 				};
 				person.update({
 						rfid: id
@@ -109,13 +111,38 @@ var swipe = function(id, num) {
 		}
 	})
 }
-client.on('message', function(topic, id) {
-	// ignore non-reader topics
-	if(topic != config.mqtt.topics.reader) {
-		return;
-	}
 
-	// run appropriate action
-	// todo: abstract?
-	act(id);		
+var actions = {};
+
+var legalConfigProperties = ['accessPeriod', 'accessAmount', 'recentVisitTimeframe',
+		'recentVisitLabel', 'dispenseTime'];
+actions[config.mqtt.topics.config] = function(topic, options) {
+	// handle config message
+	try {
+        var message = JSON.parse(options);
+    } catch(err) {
+        // do nothing if parsing fails
+        // todo: log
+        console.error('Invalid JSON: ' + options);
+        return;
+    }
+    
+    _.each(legalConfigProperties, function(prop) {
+    	if(message.hasOwnProperty(prop)) {
+    		config.modules.controller[prop] = message[prop];
+    	}
+    });
+    console.log('%d, %s', config.modules.controller.accessAmount, config.modules.controller.recentVisitLabel);
+};
+
+actions[config.mqtt.topics.reader] = function(topic, id) {
+	// handle rfid from reader
+	act(id);
+};
+
+client.on('message', function(topic, message) {
+	var action = actions[topic];
+	if(action) {
+		action(topic, message);
+	}		
 });
