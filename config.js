@@ -8,8 +8,7 @@ module.exports = {
         topics: {
             reader: 'mm-reader',
             screen: 'mm-screen',
-            //dispenser: 'mm-dispenser'
-            dispenser: 'ait',
+            dispenser: 'mm-dispenser',
             config: 'mm-config'
         }
     },
@@ -22,7 +21,7 @@ module.exports = {
         	'accessAmount' : 2,
         	'recentVisitTimeframe' : 6048000000,
         	'recentVisitLabel' : "week",
-        	'dispenseTime' : 1
+        	'dispenseTime' : 1000
     	},
         dispenser: {
         },

@@ -28,20 +28,20 @@ void loop() {
     //digitalWrite(1, HIGH);
     Serial.println("Motor Running");
     motor.run(FORWARD);
-    for (i=0; i<randNumber; i++) {
+    for (i=0; i<255; i++) {
       motor.setSpeed(i);  
-      delay(10);
+      delay(3);
     }
-
-    for (i=randNumber; i!=0; i--) {
+    while(digitalRead(SWITCH_PIN))
+        ;
+    for (i=255; i!=0; i--) {
       motor.setSpeed(i);  
-      delay(10);
+      delay(3);
     }
     motor.run(RELEASE);
     //digitalWrite(1,LOW);
     Serial.println("Motor Stop");
-    while(digitalRead(SWITCH_PIN))
-      ;
+    
   }
 }
 

@@ -34,7 +34,8 @@ var act = function(id) {
 			if(err) {
 				return console.error(err);
 			// check if uses exceeds accessAmount within accessPeriod
-			} else if (count < config.modules.controller.accessAmount || id == '446779900000000') {
+			} else if (count < config.modules.controller.accessAmount || 
+					id == '446779900000000' || id == '64217f0200000000') {
 				recordVisit(id);
 			} else {
 				opts = {
@@ -108,7 +109,8 @@ var send = function(id, num) {
 
 			// broadcast to dispenser
 			if(success) {
-				client.publish(config.mqtt.topics.dispenser, 'yolo');
+				client.publish(config.mqtt.topics.dispenser, 
+						JSON.stringify(config.modules.controller.dispenseTime));
 			}
 		}
 	})
@@ -134,7 +136,8 @@ actions[config.mqtt.topics.config] = function(topic, options) {
     		config.modules.controller[prop] = message[prop];
     	}
     });
-    console.log('%d, %s', config.modules.controller.accessAmount, config.modules.controller.recentVisitLabel);
+    console.log('%d, %s', config.modules.controller.accessAmount, 
+    		config.modules.controller.recentVisitLabel);
 };
 
 actions[config.mqtt.topics.reader] = function(topic, id) {

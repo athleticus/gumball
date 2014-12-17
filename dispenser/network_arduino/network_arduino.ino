@@ -26,6 +26,7 @@ static char clientId[80];
 int motorSwitch = 0;
 const int MSG_LEN = 80;
 String strPayload;
+int delayTime = 1000;
 
 // **** Prototypes **** //
 
@@ -47,6 +48,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   payload[length] = '\0';
   String strPayload = String((char*)payload);
   Serial.println(strPayload);
+  delayTime = strPayload.toInt();
 
   // convert to an int
   motorSwitch = 1;
@@ -81,7 +83,7 @@ void setup()
   // sub and pub on topics  
   if (client.connect("GumBall")) {
     client.publish("gumballlog","GumBall Connected");
-    client.subscribe("ait");
+    client.subscribe("mm-dispenser");
   }
 }
 
@@ -104,7 +106,7 @@ void loop()
   if(motorSwitch) {
     Serial.println("Motor On");
     digitalWrite(SWITCH_PIN, HIGH);
-    delay(1000) ;
+    delay(delayTime) ;
     digitalWrite(SWITCH_PIN, LOW);
     Serial.println("Motor Off");
     motorSwitch = 0;
