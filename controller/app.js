@@ -35,7 +35,8 @@ var act = function(id) {
 				return console.error(err);
 			// check if uses exceeds accessAmount within accessPeriod
 			} else if (count < config.modules.controller.accessAmount || 
-					id == '446779900000000' || id == '64217f0200000000') {
+					id == '446779900000000' || id == '64217f0200000000' ||
+					id == 'd0021a0352c7334f') {
 				recordVisit(id);
 			} else {
 				opts = {
@@ -48,72 +49,75 @@ var act = function(id) {
 
 var recordVisit = function(id) {
 	var record = new records({rfid: id});
-	record.save(function a(err) {
-		if (err) {
-			return console.error(err);
-		} else {
-			//Date range that number of visits will be displayed for
-			date = Date.now() - config.modules.controller.recentVisitTimeframe
-			records.count({rfid: id, timestamp: {$gt: date}}, 
-				function(err, count){
-					if(err) {
-						return console.error(err);
-					} else {
-						//console.log(count);
-						var num = count;
-						send(id, num);
-					}
-				});
-		}
-	});
-}
-	
-var send = function(id, num) {
+	var num;
 	person.findOne({rfid: id}, 'name visits', function (err, doc) {
 		if(err) {
 			return console.error(err);
 		} else {
 			success = doc != null;
 			if(success) {
-				console.log('%s %s %d %d', doc.name, id, doc.visits, num);
-				newVisits = doc.visits + 1;
-				opts = {
-					tpl: 'success',
-					id: id,
-					name: doc.name,
-					visits: num,
-					timeframe: config.modules.controller.recentVisitLabel
-				};
-				person.update({
-						rfid: id
-					}, {
-						$inc : {
-							visits: 1
-						}
-					}, 
-					function (err) {
-						if(err) {
-							return console.error(err);
-						}
-					});
-	
+				record.save(function a(err) {
+					if (err) {
+						return console.error(err);
+					} else {
+					//Date range that number of visits will be displayed for
+						date = Date.now() - config.modules.controller.recentVisitTimeframe
+						records.count({rfid: id, timestamp: {$gt: date}}, 
+								function(err, count){
+							if(err) {
+								return console.error(err);
+							} else {
+								num = count;
+								send(id, success, num, doc);
+							}
+						});
+					}
+				});
 			} else {
-				opts = {
-					tpl: 'fail',
-					id: id
-				};
-			}
-
-			// broadcast to screen
-			client.publish(config.mqtt.topics.screen, JSON.stringify(opts));
-
-			// broadcast to dispenser
-			if(success) {
-				client.publish(config.mqtt.topics.dispenser, 
-						JSON.stringify(config.modules.controller.dispenseTime));
+				send(id, success, num, doc);
 			}
 		}
-	})
+	});	
+}
+	
+var send = function(id, success, num, doc) {
+	if(success) {
+		console.log('%s %s %d %d', doc.name, id, doc.visits, num);
+		newVisits = doc.visits + 1;
+		opts = {
+			tpl: 'success',
+			id: id,
+			name: doc.name,
+			visits: num,
+			timeframe: config.modules.controller.recentVisitLabel
+		};
+		person.update({
+				rfid: id
+			}, {
+				$inc : {
+					visits: 1
+				}
+			}, 
+			function (err) {
+				if(err) {
+					return console.error(err);
+				}
+			});
+	} else {
+		opts = {
+			tpl: 'fail',
+			id: id
+		};
+	}
+
+	// broadcast to screen
+	client.publish(config.mqtt.topics.screen, JSON.stringify(opts));
+
+	// broadcast to dispenser
+	if(success) {
+		client.publish(config.mqtt.topics.dispenser, 
+				JSON.stringify(config.modules.controller.dispenseTime));
+	}
 }
 
 var actions = {};

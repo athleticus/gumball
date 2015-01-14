@@ -15,12 +15,12 @@ void setup()
 }
 
 void loop() {
-  int randNumber;
+  //int randNumber;
   int i;
   
   if(digitalRead(SWITCH_PIN)) { 
-    randNumber = (int) random(100) + 100;
-    Serial.println(randNumber);
+    //randNumber = (int) random(100) + 100;
+    //Serial.println(randNumber);
     Serial.println("Motor Running");
     motor.run(FORWARD);
     for (i=0; i<255; i++) {
@@ -37,7 +37,8 @@ void loop() {
     motor.run(RELEASE);
     Serial.println("Motor Stop");
     
-  }
+  }else{
+    Serial.print("no motor")
 }
 
 

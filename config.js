@@ -17,9 +17,9 @@ module.exports = {
     },
     modules: {
     	controller: {
-    		'accessPeriod' : 300000,
+    		'accessPeriod' : 300000, //5 minutes
         	'accessAmount' : 2,
-        	'recentVisitTimeframe' : 6048000000,
+        	'recentVisitTimeframe' : 6048000000, //1 week
         	'recentVisitLabel' : "week",
         	'dispenseTime' : 1000
     	},
