@@ -5,7 +5,7 @@ var path = require('path'),
 module.exports = {
     mqtt: {
         //url: 'mqtt://winter.ceit.uq.edu.au:1883',
-        url: 'mqtt://gumball:12345@localhost:1883',
+        url: 'mqtt://gumball:password@localhost:1883',
 	topics: {
             reader: 'mm-reader',
             screen: 'mm-screen',
@@ -20,7 +20,7 @@ module.exports = {
     	controller: {
     		'accessPeriod' : 300000, //5 minutes
         	'accessAmount' : 2,
-        	'recentVisitTimeframe' : 6048000000, //1 week
+        	'recentVisitTimeframe' : 604800000, //1 week
         	'recentVisitLabel' : "week",
         	'dispenseTime' : 1000
     	},
