@@ -15,7 +15,7 @@
 byte mac[]    = {  
   0x90, 0xA2, 0xDA, 0x00, 0x00, 0x05 };
 byte server[] = { 
-  130, 102, 129, 175 };
+  130, 102, 86, 100 };
 EthernetClient ethClient;
 
 // mqtt // 
@@ -97,7 +97,7 @@ void loop()
     }
     // reconnect
     client.publish("gumballlog","GumBall Reconnected");
-    client.subscribe("ait");
+    client.subscribe("mm-dispenser");
   }
 
   // loop mqtt
