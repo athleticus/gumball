@@ -4,8 +4,9 @@ var path = require('path'),
 
 module.exports = {
     mqtt: {
-        url: 'mqtt://winter.ceit.uq.edu.au:1883',
-        topics: {
+        //url: 'mqtt://winter.ceit.uq.edu.au:1883',
+        url: 'mqtt://gumball:12345@localhost:1883',
+	topics: {
             reader: 'mm-reader',
             screen: 'mm-screen',
             dispenser: 'mm-dispenser',

@@ -1,0 +1,10 @@
+#! /bin/bash
+#
+
+res=`service gumball-reader status`
+echo $res
+if [[ $res != *"Running"* ]]
+then 
+	echo "Restarting gumball reader."
+	service gumball-reader start
+fi
